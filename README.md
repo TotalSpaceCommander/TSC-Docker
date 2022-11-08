@@ -17,10 +17,14 @@ cd TSC-Docker
 ### Build the TSC Image
 
 ```
-sudo docker build -t tsc-img .
+sudo docker build --no-cache -t tsc-img .
 ```
 
+*Note* The `--no-cache` option must be used to download the latest version of the SpaceCommander platform each time a new image is built.
+
 ### Start the stack
+
+Using _docker-compose_, all platform dependencies can be easily managed. Simply run the following command to start all components.
 
 ```
 sudo docker-compose -f docker-compose.yml up -d
@@ -32,7 +36,17 @@ Once the stack is running, find the IP address of your host and navigate to the 
 http://<<host.ip>>:8080/
 ```
 
+#### Server Logs
+
+Server logs are located on a Docker persistent volume and can be accessed from the host at the known volume path.
+
+#### Persistent Data
+
+One of the several Docker containers you will find running is an instance of MySQL/MariaDB database server. This container will contain a Docker persistent volume on which it will store the database files. Databases and system configuration will remain through platform restarts.
+
 ### Stop the stack
+
+All containers can be stopped using the same docker-compose file.
 
 ```
 sudo docker-compose -f docker-compose.yml down
