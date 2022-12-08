@@ -1,0 +1,16 @@
+[Unit]
+Description=Runner for TSC-Docker stack.
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+RestartSec=30
+User=root
+Group=docker
+WorkingDirectory=/opt/TSC-Docker
+ExecStart=/usr/local/bin/docker-compose up
+ExecStop=/usr/local/bin/docker-compose down
+
+[Install]
+WantedBy=multi-user.target
