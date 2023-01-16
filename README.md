@@ -27,24 +27,17 @@ pip3 install docker-compose
 Clone this repository which has the files required to get things going.
 
 ```
+cd /opt/
 git clone https://git.mclarkdev.com/SpaceCommander/TSC-Docker.git
 cd TSC-Docker
 ```
-
-### Build the TSC Image
-
-```
-sudo docker build --no-cache -t tsc-img .
-```
-
-*Note*: The `--no-cache` option must be used to download the latest version of the SpaceCommander platform each time a new image is built.
 
 ### Start the stack
 
 Using _docker-compose_, all platform dependencies can be easily managed. Simply run the following command to start all stack components.
 
 ```
-sudo docker-compose -f docker-compose.yml up -d
+docker-compose up -d
 ```
 
 Once the stack is running, find the LAN address of your host and navigate to the user interface using any web-browser on the same network.
@@ -58,7 +51,7 @@ http://-hostIP-/controller/
 All containers can be stopped using the same docker-compose file.
 
 ```
-sudo docker-compose -f docker-compose.yml down
+docker-compose down
 ```
 
 ### Install systemd service
@@ -66,9 +59,6 @@ sudo docker-compose -f docker-compose.yml down
 For environments using systemd, the supplied service file can be installed for managing the stack.
 
 ```
-# Move to known location
-mv TSC-Docker /opt
-
 # Install service file
 cp /opt/TSC-Docker/tsc-stack.service /etc/systemd/system/
 
@@ -96,4 +86,14 @@ Server logs are located on a Docker persistent volume and can be accessed from t
 #### Persistent Data
 
 One of the several Docker containers you will find running is an instance of MySQL/MariaDB database server. This container will contain a Docker persistent volume on which it will store the database files. Databases and system configuration will remain through platform restarts.
+
+### Updating Platform Version
+
+To update the platform to the latest version, rebuild the TSC image with the following command.
+
+Each build will consume the latest published version of the platform.
+
+```
+docker-compose build --no-cache
+```
 

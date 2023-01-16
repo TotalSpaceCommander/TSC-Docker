@@ -3,26 +3,34 @@ services:
   database:
     image: mariadb:latest
     network_mode: "host"
-    volumes:
-    - database:/var/lib/mysql
     environment:
+      TZ: "${TZ}"
       MARIADB_ROOT_PASSWORD: tsc
       MARIADB_DATABASE: tsc
       MARIADB_USER: tsc
       MARIADB_PASSWORD: tsc
+    volumes:
+    - database:/var/lib/mysql
   mqtt:
     image: hivemq/hivemq-ce:latest
     network_mode: "host"
+    environment:
+      TZ: "${TZ}"
+      HIVEMQ_BIND_ADDRESS: 0.0.0.0
     volumes:
     - mqtt:/opt/hivemq
-    environment:
-      HIVEMQ_BIND_ADDRESS: 0.0.0.0
   tsc:
-    image: tsc-img:latest
+    build: .
     network_mode: "host"
+    environment:
+      TZ: "${TZ}"
     volumes:
     - applog:/opt/server/logs
+    depends_on:
+      - database
+      - mqtt
 volumes:
   database:
   mqtt:
   applog:
+
